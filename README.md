@@ -1,6 +1,6 @@
 === (Feide) Connect Wordpress Auth ===
 Contributors: 
-Donate link: https://github.com/skrodal/
+Donate link: 
 Tags: OAuth, plugin, UNINETT, Feide, Connect
 Requires at least: 3.0.1
 Tested up to: 3.4
