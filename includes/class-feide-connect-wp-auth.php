@@ -27,6 +27,8 @@
  * @subpackage Feide_Connect_Wp_Auth/includes
  * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
+ 
+
 class Feide_Connect_Wp_Auth {
 
 	/**
@@ -56,6 +58,12 @@ class Feide_Connect_Wp_Auth {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 	protected $version;
+	
+	/**
+	 * Options stored in DB
+	 */
+	 
+	 private $plugin_options;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -71,12 +79,14 @@ class Feide_Connect_Wp_Auth {
 		$this->plugin_name = 'feide-connect-wp-auth';
 		$this->version = '1.0.0';
 
+		$this->plugin_options = get_option($this->plugin_name);
+		
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
+
 
 	/**
 	 * Load the required dependencies for this plugin.
@@ -87,6 +97,7 @@ class Feide_Connect_Wp_Auth {
 	 * - Feide_Connect_Wp_Auth_i18n. Defines internationalization functionality.
 	 * - Feide_Connect_Wp_Auth_Admin. Defines all hooks for the admin area.
 	 * - Feide_Connect_Wp_Auth_Public. Defines all hooks for the public side of the site.
+	 * - Feide_Connect_Wp_Auth_Login. The Feide Connect OAuth class. 
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -118,7 +129,12 @@ class Feide_Connect_Wp_Auth {
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-feide-connect-wp-auth-public.php';
-
+		
+		/**
+		 * The Feide Connect OAuth class
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-feide-connect-wp-auth-login.php';
+		
 		$this->loader = new Feide_Connect_Wp_Auth_Loader();
 
 	}
@@ -151,12 +167,34 @@ class Feide_Connect_Wp_Auth {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Feide_Connect_Wp_Auth_Admin( $this->get_plugin_name(), $this->get_version() );
-
+		// Styles and scripts
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		// Add menu item
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_plugin_admin_menu' );
+		// Add Settings link to the plugin
+		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $this->plugin_name . '.php' );
+		$this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
+		// Save/Update our plugin options
+		$this->loader->add_action('admin_init', $plugin_admin, 'options_update');
 
+		// Stuff to hook into ONLY if OAuth option is enabled
+		if($this->plugin_options['enable_plugin'] === 1) {
+			// Hook for the query_vars and template_redirect
+			$this->loader->add_filter('query_vars', $plugin_admin,  'oauthTriggersFilter');
+			$this->loader->add_action('template_redirect', $plugin_admin,  'oAuthQvarHandler');
+			// Change login logo, url and title
+			$this->loader->add_filter( 'login_headerurl', $plugin_admin, 'fc_login_change_logo_url' );
+			$this->loader->add_filter( 'login_headertitle', $plugin_admin, 'fc_login_change_logo_title' );
+			$this->loader->add_action( 'login_enqueue_scripts', $plugin_admin, 'fc_login_change_logo' );
+			// Edit login form to include Feide Connect button
+			$this->loader->add_filter('login_message', $plugin_admin, 'fc_login_add_feide_connect');
+			// Catch logout event
+			$this->loader->add_action('wp_logout', $plugin_admin, 'fc_logout_handler');
+		}
 	}
-
+	
+	
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.

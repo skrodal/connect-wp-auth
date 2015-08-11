@@ -1,4 +1,4 @@
-=== (Feide)Connect Wordpress Auth ===
+=== (Feide) Connect Wordpress Auth ===
 Contributors: 
 Donate link: https://github.com/skrodal/
 Tags: OAuth, plugin, UNINETT, Feide, Connect

@@ -13,14 +13,13 @@
  * @package           Feide_Connect_Wp_Auth
  *
  * @wordpress-plugin
- * Plugin Name:       (Feide)Connect Wordpress Auth
+ * Plugin Name:       (Feide) Connect Wordpress Auth
  * Plugin URI:        https://github.com/skrodal/feide-connect-wp-auth
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Wordpress authentication (and registration) with (Feide) Connect from UNINETT AS.
  * Version:           1.0.0
- * Author:            Simon Skrødal
+ * Author:            Simon Skr&oslash;dal
  * Author URI:        https://github.com/skrodal/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:           MIT
  * Text Domain:       feide-connect-wp-auth
  * Domain Path:       /languages
  */
@@ -29,6 +28,7 @@
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
 
 /**
  * The code that runs during plugin activation.
@@ -72,4 +72,5 @@ function run_feide_connect_wp_auth() {
 	$plugin->run();
 
 }
-run_feide_connect_wp_auth();
+// Only kick off when we have access to pluggable functions (user registration stuff)
+add_action( 'plugins_loaded', 'run_feide_connect_wp_auth');

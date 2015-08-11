@@ -30,7 +30,7 @@ class Feide_Connect_Wp_Auth_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+		
 	}
-
+	
 }
