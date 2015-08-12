@@ -2,22 +2,14 @@
 /**
  * Feide Connect authentication flow
  *
- * @link       https://github.com/skrodal/
- * @since      1.0.0
- *
- * @package    Feide_Connect_Wp_Auth
- * @subpackage Feide_Connect_Wp_Auth/includes
- */
-
-/**
- * Feide Connect authentication flow
- *
  * This class handles the auth flow. It is loaded only if relevant query string vars are detected.
  *
  * @since      1.0.0
+ * @link       https://github.com/skrodal/feide-connect-wp-auth
+ * @author     Simon Skrødal <simon.skrodal@uninett.no>
+ *
  * @package    Feide_Connect_Wp_Auth
  * @subpackage Feide_Connect_Wp_Auth/includes
- * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
  
 

@@ -8,7 +8,7 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://github.com/skrodal/
+ * @link              https://github.com/skrodal/feide-connect-wp-auth
  * @since             1.0.0
  * @package           Feide_Connect_Wp_Auth
  *

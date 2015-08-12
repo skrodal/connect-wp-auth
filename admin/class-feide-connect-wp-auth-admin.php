@@ -3,22 +3,15 @@
 /**
  * The admin-specific functionality of the plugin.
  *
- * @link       https://github.com/skrodal/
- * @since      1.0.0
- *
- * @package    Feide_Connect_Wp_Auth
- * @subpackage Feide_Connect_Wp_Auth/admin
- */
-
-/**
- * The admin-specific functionality of the plugin.
- *
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
+ * @since      1.0.0
+ * @link       https://github.com/skrodal/feide-connect-wp-auth
+ * @author     Simon Skrødal <simon.skrodal@uninett.no>
+ *
  * @package    Feide_Connect_Wp_Auth
  * @subpackage Feide_Connect_Wp_Auth/admin
- * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
  
 session_start();
@@ -248,34 +241,4 @@ class Feide_Connect_Wp_Auth_Admin {
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/feide-connect-wp-auth-admin.js', array( 'jquery' ), $this->version, false );
 	}
-
-	
-	#### 
-	## Login logo/url/title/button
-	####
-	// URL
-	function fc_login_change_logo_url() { return '#'; } //home_url(); }
-	// TITLE
-	function fc_login_change_logo_title() { return 'Logg inn med (Feide) Connect'; }
-	// LOGO
-	function fc_login_change_logo() {
-		echo '
-				<style type="text/css">
-			        .login h1 a {
-			            background-image: none, url("' . plugin_dir_url( __FILE__ ) . 'partials/images/uninett_connect.png");
-						background-size: 282px 49px;
-						height: 49px;
-						width: 282px;
-			            padding-bottom: 30px;
-			        }
-			    </style>';
-	}	
-	
-	// Feide Connect BUTTON
-	function fc_login_add_feide_connect(){
-			include_once('partials/feide-connect-wp-auth-admin-login-form.php');
-	}
-	###
-	## //
-	###
 }

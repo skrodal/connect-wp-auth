@@ -23,9 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
+ * @link       https://github.com/skrodal/feide-connect-wp-auth
+ * @author     Simon Skrødal <simon.skrodal@uninett.no>
+ *
  * @package    Feide_Connect_Wp_Auth
  * @subpackage Feide_Connect_Wp_Auth/includes
- * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
  
 
@@ -183,12 +185,6 @@ class Feide_Connect_Wp_Auth {
 			// Hook for the query_vars and template_redirect
 			$this->loader->add_filter('query_vars', $plugin_admin,  'oauthTriggersFilter');
 			$this->loader->add_action('template_redirect', $plugin_admin,  'oAuthQvarHandler');
-			// Change login logo, url and title
-			$this->loader->add_filter( 'login_headerurl', $plugin_admin, 'fc_login_change_logo_url' );
-			$this->loader->add_filter( 'login_headertitle', $plugin_admin, 'fc_login_change_logo_title' );
-			$this->loader->add_action( 'login_enqueue_scripts', $plugin_admin, 'fc_login_change_logo' );
-			// Edit login form to include Feide Connect button
-			$this->loader->add_filter('login_message', $plugin_admin, 'fc_login_add_feide_connect');
 			// Catch logout event
 			$this->loader->add_action('wp_logout', $plugin_admin, 'fc_logout_handler');
 		}
@@ -208,6 +204,15 @@ class Feide_Connect_Wp_Auth {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		// Stuff to hook into ONLY if OAuth option is enabled
+		if($this->plugin_options['enable_plugin'] === 1) {
+			// Change login logo, url and title
+			$this->loader->add_filter( 'login_headerurl', $plugin_public, 'fc_login_change_logo_url' );
+			$this->loader->add_filter( 'login_headertitle', $plugin_public, 'fc_login_change_logo_title' );
+			$this->loader->add_action( 'login_enqueue_scripts', $plugin_public, 'fc_login_change_logo' );
+			// Edit login form to include Feide Connect button
+			$this->loader->add_filter('login_message', $plugin_public, 'fc_login_add_feide_connect');
+		}
 
 	}
 

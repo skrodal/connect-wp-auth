@@ -20,9 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
+ * @link       https://github.com/skrodal/feide-connect-wp-auth
+ * @author     Simon Skrødal <simon.skrodal@uninett.no>
+ *
  * @package    Feide_Connect_Wp_Auth
  * @subpackage Feide_Connect_Wp_Auth/includes
- * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
 class Feide_Connect_Wp_Auth_i18n {
 

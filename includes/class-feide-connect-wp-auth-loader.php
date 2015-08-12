@@ -1,25 +1,18 @@
 <?php
 
 /**
- * Register all actions and filters for the plugin
- *
- * @link       https://github.com/skrodal/
- * @since      1.0.0
- *
- * @package    Feide_Connect_Wp_Auth
- * @subpackage Feide_Connect_Wp_Auth/includes
- */
-
-/**
  * Register all actions and filters for the plugin.
  *
  * Maintain a list of all hooks that are registered throughout
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
+ * @since      1.0.0
+ * @link       https://github.com/skrodal/feide-connect-wp-auth
+ * @author     Simon Skrødal <simon.skrodal@uninett.no>
+ *
  * @package    Feide_Connect_Wp_Auth
  * @subpackage Feide_Connect_Wp_Auth/includes
- * @author     Simon Skrødal <simon.skrodal@uninett.no>
  */
 class Feide_Connect_Wp_Auth_Loader {
 
