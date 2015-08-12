@@ -26,11 +26,8 @@
 	</ol>
 	
 	<hr/>
+
 		
-	<h3>Client Settings:</h3>
-	
-	<p>All fields are required.</p>
-	
 	<form method="post" name="<?php echo $this->plugin_name; ?>" action="options.php">
 		
     <?php
@@ -39,30 +36,40 @@
 
         // 
         $enabled 		= $options['plugin']['enabled'];
+		//
         $client_id 		= $options['client']['id'];
-		
         $client_secret	= $options['client']['secret'];
         $redirect_url 	= $options['client']['redirect_url'];
-		
+		//
         $ep_auth 		= $options['endpoints']['authorization'];
         $ep_token 		= $options['endpoints']['token'];
         $ep_userinfo 	= $options['endpoints']['userinfo'];
+		//
 		$ep_groups 		= $options['endpoints']['groups'];
     	// 
         settings_fields($this->plugin_name);
-        do_settings_sections($this->plugin_name);
+        //do_settings_sections($this->plugin_name);
     ?>
-		
-		
+
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row">Enable Plugin:</th>
+					<th scope="row"><h3>Enable:</h3></th>
 					<td>
 						<input type="checkbox" id="<?php echo $this->plugin_name; ?>-plugin_enabled" name="<?php echo $this->plugin_name; ?>[plugin_enabled]" value="1" <?php checked($enabled, 1); ?>/>
 					</td>
 				</tr>
-			
+			</tbody>
+		</table> <!-- .form-table -->
+		
+		<hr/>
+		
+		<h3>Client Settings:</h3>
+		
+		<p>You must fill in all of these fields.</p>
+		
+		<table class="form-table">
+			<tbody>
 				<tr valign="top">
 					<th scope="row">Client ID:</th>
 					<td>
@@ -91,6 +98,8 @@
 		
 		<h3>OAuth Provider</h3>
 		
+		<p>You will most likely not need to change the default values.</p>
+		
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -111,6 +120,23 @@
 					<th scope="row">Userinfo Endpoint:</th>
 					<td>
 						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_userinfo" name="<?php echo $this->plugin_name; ?>[ep_userinfo]" value="<?php if(!empty($ep_userinfo)) echo $ep_userinfo; ?>"/>
+					</td>
+				</tr>			
+			</tbody>
+		</table> <!-- .form-table -->
+		
+		<hr>
+		
+		<h3>Optional Settings</h3>
+		
+		<p>Enable extra functionality.</p>
+		
+		<table class="form-table">
+			<tbody>
+				<tr valign="top">
+					<th scope="row">Enable Groups:</th>
+					<td>
+						<input type="checkbox" id="<?php echo $this->plugin_name; ?>-groups_enabled" name="<?php echo $this->plugin_name; ?>[groups_enabled]" value="1" <?php checked($enabled, 1); ?>/>
 					</td>
 				</tr>
 				

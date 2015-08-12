@@ -156,29 +156,54 @@ class Feide_Connect_Wp_Auth_Admin {
 	 *
 	 */
 	public function validate($input) {
+		// 
+		$error_flag = false;	
+		
 	    // Inputs        
 	    $options = array();
 	
         $options['plugin']['enabled']			= (isset($input['plugin_enabled']) && !empty($input['plugin_enabled'])) ? 1 : 0;
 		
-        $options['client']['id']				= esc_attr($input['client_id']);
-        $options['client']['secret']			= esc_attr($input['client_secret']);
-        $options['client']['redirect_url']		= esc_url($input['redirect_url']);
+		// REQUIRED OPTIONS
+        $options['client']['id']				= trim( esc_attr($input['client_id']) );
+        $options['client']['secret']			= trim( esc_attr($input['client_secret']) );
+        $options['client']['redirect_url']		= trim( esc_url($input['redirect_url']) );
+		// 
+		foreach($options['client'] as $option => $value){
+			if(!isset($value) || empty($value)){
+				$error_flag = true;
+				// Display error
+    			add_settings_error('(Feide Connect)', esc_attr( 'settings_updated' ), '[Client ' . $option .'] is not set. Plugin disabled.', 'error');
+			}
+		}
 		
-        $options['endpoints']['authorization']	= esc_url($input['ep_auth']);
-        $options['endpoints']['token']			= esc_url($input['ep_token']);
-        $options['endpoints']['userinfo']		= esc_url($input['ep_userinfo']);
-		$options['endpoints']['groups']			= esc_url($input['ep_groups']);
-	    
+		// REQUIRED OPTIONS
+        $options['endpoints']['authorization']	= trim( esc_url($input['ep_auth']) );
+        $options['endpoints']['token']			= trim( esc_url($input['ep_token']) );
+        $options['endpoints']['userinfo']		= trim( esc_url($input['ep_userinfo']) );
+		//
+		foreach($options['endpoints'] as $option => $value){
+			if(!isset($value) || empty($value)){
+				$error_flag = true;
+				// Display error
+    			add_settings_error('(Feide Connect)', esc_attr( 'settings_updated' ), '[' . $option .' endpoint] is not set. Plugin disabled.', 'error');
+			}
+		}
+		
+		// 
+		$options['endpoints']['groups']			= trim( esc_url($input['ep_groups']) );
+		
+		// If any errors were caught, disable the plugin.
+		if($error_flag){
+			$options['plugin']['enabled'] = 0;
+		}
+	    // We still store the options (even if empty)
 	    return json_encode($options);
 	 }
 
 
 	
 	
-
-
-
 
 
 
@@ -197,13 +222,11 @@ class Feide_Connect_Wp_Auth_Admin {
 			// Only if user is not already logged in
 			if (!is_user_logged_in()){
 				// If login was requested
-				$login = get_query_var('login') === "feideconnect";		
+				$login = get_query_var('login') == "feideconnect";
 				// Initial callback 
 				$this->feide_connect->callback();
 				// Get token if login request was issued and a token is not already registered
 				$token = $this->feide_connect->getToken($login);
-				
-				
 			}  else {
 				// User was already logged in - go back to front
 				wp_safe_redirect(home_url());
