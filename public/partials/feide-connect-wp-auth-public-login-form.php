@@ -15,7 +15,7 @@
 
 	<?php
 		// ?login=1 is the trigger that sets off the Feide Connect auth flow
-		$loginout = is_user_logged_in() ? wp_logout_url() : esc_url( home_url( '/?login=1' ));
+		$loginout = is_user_logged_in() ? wp_logout_url() : esc_url( home_url( '/?login=feideconnect' ));
 		// 
 		$loginout_text = is_user_logged_in() ? 'Log out' : 'Authenticate with (Feide) Connect';
 	?>

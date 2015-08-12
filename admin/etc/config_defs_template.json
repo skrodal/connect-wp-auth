@@ -1,0 +1,27 @@
+{
+	"client" :  
+		{
+			"id" 			: 	null, 
+			"secret" 		:	null,
+			"redirect_url" 	:	null
+		},
+	"endpoints" : 
+		{
+			"authorization" 	: 	"https://auth.feideconnect.no/oauth/authorization",
+			"token" 			: 	"https://auth.feideconnect.no/oauth/token",
+			"userinfo" 			: 	"https://auth.feideconnect.no/userinfo",
+			"groups" 			: 	"https://groups-api.feideconnect.no/groups/"
+		},
+	"user" :
+		{
+			"default_role"		:	"subscriber"
+		},
+	"plugin" :
+		{
+			"enabled"						: 0,
+			"name"							: "feide-connect-wp-auth",
+			"version"						: "1.0.0",
+			"delete_settings_on_uninstall" 	: 0,
+			"delete_settings_on_deactivate" : 0
+		}
+}

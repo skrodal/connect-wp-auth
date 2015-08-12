@@ -76,12 +76,14 @@ class Feide_Connect_Wp_Auth {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
+	public function __construct($config) {
+		
+		$this->plugin_name = $config['plugin']['name'];
+		$this->version = $config['plugin']['version'];;
 
-		$this->plugin_name = 'feide-connect-wp-auth';
-		$this->version = '1.0.0';
-
-		$this->plugin_options = get_option($this->plugin_name);
+		$this->plugin_options = json_decode(get_option($this->plugin_name), true);
+		
+		
 		
 		$this->load_dependencies();
 		$this->set_locale();
@@ -179,12 +181,12 @@ class Feide_Connect_Wp_Auth {
 		$this->loader->add_filter( 'plugin_action_links_' . $plugin_basename, $plugin_admin, 'add_action_links' );
 		// Save/Update our plugin options
 		$this->loader->add_action('admin_init', $plugin_admin, 'options_update');
-
 		// Stuff to hook into ONLY if OAuth option is enabled
-		if($this->plugin_options['enable_plugin'] === 1) {
-			// Hook for the query_vars and template_redirect
-			$this->loader->add_filter('query_vars', $plugin_admin,  'oauthTriggersFilter');
-			$this->loader->add_action('template_redirect', $plugin_admin,  'oAuthQvarHandler');
+		if($this->plugin_options['plugin']['enabled'] === 1) {
+			// Hook for query variables relevant to the OAuth flow
+			$this->loader->add_filter('query_vars', $plugin_admin,  'oauth_qvar_filter');
+			// Catch OAuth-related qvars and act upon these
+			$this->loader->add_action('template_redirect', $plugin_admin,  'oauth_redirect_handler');
 			// Catch logout event
 			$this->loader->add_action('wp_logout', $plugin_admin, 'fc_logout_handler');
 		}
@@ -205,7 +207,7 @@ class Feide_Connect_Wp_Auth {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		// Stuff to hook into ONLY if OAuth option is enabled
-		if($this->plugin_options['enable_plugin'] === 1) {
+		if($this->plugin_options['plugin']['enabled'] === 1) {
 			// Change login logo, url and title
 			$this->loader->add_filter( 'login_headerurl', $plugin_public, 'fc_login_change_logo_url' );
 			$this->loader->add_filter( 'login_headertitle', $plugin_public, 'fc_login_change_logo_title' );

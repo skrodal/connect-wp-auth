@@ -15,6 +15,7 @@
  */
  
 session_start();
+// session_destroy();
 
 class Feide_Connect_Wp_Auth_Admin {
 
@@ -30,8 +31,8 @@ class Feide_Connect_Wp_Auth_Admin {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of this plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string    $plugin_name   The name of this plugin.
+	 * @param      string    $version    	The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
 		// 
@@ -156,19 +157,20 @@ class Feide_Connect_Wp_Auth_Admin {
 	 */
 	public function validate($input) {
 	    // Inputs        
-	    $valid = array();
+	    $options = array();
 	
-	    //Cleanup
-	    $valid['enable_plugin'] = (isset($input['enable_plugin']) && !empty($input['enable_plugin'])) ? 1 : 0;
-		$valid['client_id'] = esc_attr($input['client_id']);
-		$valid['client_secret'] = esc_attr($input['client_secret']);
-		$valid['redirect_url'] = esc_url($input['redirect_url']);
+        $options['plugin']['enabled']			= (isset($input['plugin_enabled']) && !empty($input['plugin_enabled'])) ? 1 : 0;
+		
+        $options['client']['id']				= esc_attr($input['client_id']);
+        $options['client']['secret']			= esc_attr($input['client_secret']);
+        $options['client']['redirect_url']		= esc_url($input['redirect_url']);
+		
+        $options['endpoints']['authorization']	= esc_url($input['ep_auth']);
+        $options['endpoints']['token']			= esc_url($input['ep_token']);
+        $options['endpoints']['userinfo']		= esc_url($input['ep_userinfo']);
+		$options['endpoints']['groups']			= esc_url($input['ep_groups']);
 	    
-		$valid['auth_endpoint'] = esc_url($input['auth_endpoint']);
-		$valid['token_endpoint'] = esc_url($input['token_endpoint']);
-		$valid['userinfo_endpoint'] = esc_url($input['userinfo_endpoint']);
-	    
-	    return $valid;
+	    return json_encode($options);
 	 }
 
 
@@ -181,21 +183,21 @@ class Feide_Connect_Wp_Auth_Admin {
 
 
 	
-	// Register OAuth querystring variables (can then be used by get_query_var())
-	function oauthTriggersFilter($vars) {
+	// Register OAuth querystring variables (can then be used by oauth_redirect_handler())
+	function oauth_qvar_filter($vars) {
 		$vars[] = 'login';
 		$vars[] = 'code';
 		return $vars;
 	}
 	
-	// Include login class if OAuth-related query var is present
-	function oAuthQvarHandler() {
+	// Handle events related to login/oauth flow
+	function oauth_redirect_handler() {
 		// 
 		if (get_query_var('login') || get_query_var('code')) {
 			// Only if user is not already logged in
 			if (!is_user_logged_in()){
 				// If login was requested
-				$login = get_query_var('login') === "1";			
+				$login = get_query_var('login') === "feideconnect";		
 				// Initial callback 
 				$this->feide_connect->callback();
 				// Get token if login request was issued and a token is not already registered

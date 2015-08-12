@@ -22,7 +22,7 @@ class Feide_Connect_Wp_Auth_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
-
+		//$config = json_decode(file_get_contents(plugin_dir_path( __FILE__ ) . 'admin/etc/config_defs.json'), true);
 	}
 
 }

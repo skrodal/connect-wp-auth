@@ -20,37 +20,37 @@ class Feide_Connect_Wp_Auth_Login {
 	protected $CLIENT_SECRET;
 	protected $REDIRECT_URI;
 	
-	protected $AUTH_ENDPOINT;
-	protected $TOKEN_ENDPOINT;
-	protected $USERINFO_ENDPOINT;
+	protected $EP_AUTH;
+	protected $EP_TOKEN;
+	protected $EP_USERINFO;
+	protected $EP_GROUPS;
 	
 	protected $OAUTH_STATE = null;
 	protected $OAUTH_TOKEN = null;
 	
 	protected $plugin_name;
 	
+	/**
+	 * Pull info from options
+	 */
 	public function __construct($plugin_name) {
 		$this->plugin_name = $plugin_name;
         //Grab all options from DB
-        $options = get_option($plugin_name);
+        $options = json_decode(get_option($plugin_name), true);
+		// TODO: Sanitise -> make sure all required options are available.
         // 
-        $this->CLIENT_ENABLED 		= $options['enable_plugin'];
-        $this->CLIENT_ID 			= $options['client_id'];
-        $this->CLIENT_SECRET 		= $options['client_secret'];
-        $this->REDIRECT_URI 		= $options['redirect_url'];
+        $this->CLIENT_ENABLED 		= $options['plugin']['enabled'];
+        $this->CLIENT_ID 			= $options['client']['id'];
+        $this->CLIENT_SECRET 		= $options['client']['secret'];
+        $this->REDIRECT_URI 		= $options['client']['redirect_url'];
 		// 
-        $this->AUTH_ENDPOINT 		= $options['auth_endpoint'];
-        $this->TOKEN_ENDPOINT 		= $options['token_endpoint'];
-        $this->USERINFO_ENDPOINT 	= $options['userinfo_endpoint'];
-		
-		
-		error_log("FEIDE CONNECT: " . json_encode($_SESSION));
-		
+        $this->EP_AUTH 			= $options['endpoints']['authorization'];
+        $this->EP_TOKEN 		= $options['endpoints']['token'];
+        $this->EP_USERINFO 		= $options['endpoints']['userinfo'];
+		$this->EP_GROUP 		= $options['endpoints']['groups'];
 		//
 		if (!empty($_SESSION[$this->plugin_name.'_STATE'])) $this->OAUTH_STATE = $_SESSION[$this->plugin_name.'_STATE'];
 		if (!empty($_SESSION[$this->plugin_name.'_TOKEN'])) $this->OAUTH_TOKEN = $_SESSION[$this->plugin_name.'_TOKEN'];
-		
-		
 	}
 
 	### Feide Connect Functions ###
@@ -149,7 +149,7 @@ class Feide_Connect_Wp_Auth_Login {
 			'redirect_uri' => $this->REDIRECT_URI,
 			'state' => $state,
 		);
-		$this->redirect($this->AUTH_ENDPOINT, $q);
+		$this->redirect($this->EP_AUTH, $q);
 	}
 	
 	/**
@@ -199,7 +199,7 @@ class Feide_Connect_Wp_Auth_Login {
 			'code' => $code,
 		);
 		
-		$response = $this->post($this->TOKEN_ENDPOINT, $q);
+		$response = $this->post($this->EP_TOKEN, $q);
 		//
 		if (empty($response['access_token'])) {
 			echo "response was was <pre>"; print_r($response);
@@ -220,7 +220,7 @@ class Feide_Connect_Wp_Auth_Login {
 	 *
 	 */
 	public function getUserInfo() {
-		return $this->protectedRequest($this->USERINFO_ENDPOINT);
+		return $this->protectedRequest($this->EP_USERINFO);
 	}
 
 

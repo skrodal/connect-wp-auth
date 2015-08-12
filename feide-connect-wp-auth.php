@@ -30,6 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-feide-connect-wp-auth-activator.php
@@ -67,8 +68,8 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-feide-connect-wp-auth.php'
  * @since    1.0.0
  */
 function run_feide_connect_wp_auth() {
-
-	$plugin = new Feide_Connect_Wp_Auth();
+	$config = json_decode(file_get_contents( plugin_dir_path( __FILE__ )  . 'admin/etc/config_defs.json'), true);
+	$plugin = new Feide_Connect_Wp_Auth($config);
 	$plugin->run();
 
 }

@@ -35,17 +35,19 @@
 		
     <?php
         //Grab all options
-        $options = get_option($this->plugin_name);
+        $options = json_decode(get_option($this->plugin_name), true);
 
         // 
-        $enabled = $options['enable_plugin'];
-        $client_id = $options['client_id'];
+        $enabled 		= $options['plugin']['enabled'];
+        $client_id 		= $options['client']['id'];
 		
-        $client_secret = $options['client_secret'];
-        $redirect_url = $options['redirect_url'];
-        $auth_endpoint = $options['auth_endpoint'];
-        $token_endpoint = $options['token_endpoint'];
-        $userinfo_endpoint = $options['userinfo_endpoint'];
+        $client_secret	= $options['client']['secret'];
+        $redirect_url 	= $options['client']['redirect_url'];
+		
+        $ep_auth 		= $options['endpoints']['authorization'];
+        $ep_token 		= $options['endpoints']['token'];
+        $ep_userinfo 	= $options['endpoints']['userinfo'];
+		$ep_groups 		= $options['endpoints']['groups'];
     	// 
         settings_fields($this->plugin_name);
         do_settings_sections($this->plugin_name);
@@ -57,28 +59,28 @@
 				<tr valign="top">
 					<th scope="row">Enable Plugin:</th>
 					<td>
-						<input type="checkbox" id="<?php echo $this->plugin_name; ?>-enable_plugin" name="<?php echo $this->plugin_name; ?>[enable_plugin]" value="1" <?php checked($enabled, 1); ?>/>
+						<input type="checkbox" id="<?php echo $this->plugin_name; ?>-plugin_enabled" name="<?php echo $this->plugin_name; ?>[plugin_enabled]" value="1" <?php checked($enabled, 1); ?>/>
 					</td>
 				</tr>
 			
 				<tr valign="top">
 					<th scope="row">Client ID:</th>
 					<td>
-						<input type="text" id="<?php echo $this->plugin_name; ?>-client_id" name="<?php echo $this->plugin_name; ?>[client_id]"  value="<?php if(!empty($client_id)) echo $client_id; //d1ce8192-fc2a-4046-938a-655ffc5be571 ?>"/> 
+						<input type="text" id="<?php echo $this->plugin_name; ?>-client_id" name="<?php echo $this->plugin_name; ?>[client_id]"  value="<?php if(!empty($client_id)) echo $client_id; ?>"/> 
 					</td>
 				</tr>
 			
 			<tr valign="top">
 				<th scope="row">Client Secret:</th>
 				<td>
-					<input type="text" id="<?php echo $this->plugin_name; ?>-client_secret" name="<?php echo $this->plugin_name; ?>[client_secret]" value="<?php if(!empty($client_secret)) echo $client_secret; //20b53caa-0dd2-4ea7-9a92-9e3ebbeb239e?>"/>
+					<input type="text" id="<?php echo $this->plugin_name; ?>-client_secret" name="<?php echo $this->plugin_name; ?>[client_secret]" value="<?php if(!empty($client_secret)) echo $client_secret; ?>"/>
 				</td>
 			</tr>
 			
 			<tr valign="top">
 				<th scope="row">Redirect URL:</th>
 				<td>
-					<input type="url" id="<?php echo $this->plugin_name; ?>-redirect_url" name="<?php echo $this->plugin_name; ?>[redirect_url]" value="<?php if(!empty($redirect_url)) echo $redirect_url; //https://127.0.0.1/sites/wp-dev/?>"/>
+					<input type="url" id="<?php echo $this->plugin_name; ?>-redirect_url" name="<?php echo $this->plugin_name; ?>[redirect_url]" value="<?php if(!empty($redirect_url)) echo $redirect_url; ?>"/>
 				</td>
 			</tr>
 			
@@ -94,21 +96,28 @@
 				<tr valign="top">
 					<th scope="row">Authorization Endpoint:</th>
 					<td>
-						<input type="url" id="<?php echo $this->plugin_name; ?>-auth_endpoint" name="<?php echo $this->plugin_name; ?>[auth_endpoint]" value="<?php if(!empty($auth_endpoint)) echo $auth_endpoint; //https://auth.feideconnect.no/oauth/authorization ?>"/>
+						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_auth" name="<?php echo $this->plugin_name; ?>[ep_auth]" value="<?php if(!empty($ep_auth)) echo $ep_auth; ?>"/>
 					</td>
 				</tr>
 				
 				<tr valign="top">
 					<th scope="row">Token Endpoint:</th>
 					<td>
-						<input type="url" id="<?php echo $this->plugin_name; ?>-token_endpoint" name="<?php echo $this->plugin_name; ?>[token_endpoint]" value="<?php if(!empty($token_endpoint)) echo $token_endpoint; //https://auth.feideconnect.no/oauth/token ?>"/>
+						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_token" name="<?php echo $this->plugin_name; ?>[ep_token]" value="<?php if(!empty($ep_token)) echo $ep_token; ?>"/>
 					</td>
 				</tr>
 				
 				<tr valign="top">
 					<th scope="row">Userinfo Endpoint:</th>
 					<td>
-						<input type="url" id="<?php echo $this->plugin_name; ?>-userinfo_endpoint" name="<?php echo $this->plugin_name; ?>[userinfo_endpoint]" value="<?php if(!empty($userinfo_endpoint)) echo $userinfo_endpoint; //https://auth.feideconnect.no/userinfo ?>"/>
+						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_userinfo" name="<?php echo $this->plugin_name; ?>[ep_userinfo]" value="<?php if(!empty($ep_userinfo)) echo $ep_userinfo; ?>"/>
+					</td>
+				</tr>
+				
+				<tr valign="top">
+					<th scope="row">Groups API Endpoint:</th>
+					<td>
+						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_groups" name="<?php echo $this->plugin_name; ?>[ep_groups]" value="<?php if(!empty($ep_groups)) echo $ep_groups; ?>"/>
 					</td>
 				</tr>
 			
