@@ -24,17 +24,16 @@
 		<li>Create a new client at <a href='https://dashboard.feideconnect.no/' target="_blank">dashboard.feideconnect.no</a>.</li>
 		<li>Configure the below fields as per the "OAuth Details" page in the Feide Connect Client Dashboard.</li>
 	</ol>
-	
+
 	<hr/>
 
-		
 	<form method="post" name="<?php echo $this->plugin_name; ?>" action="options.php">
-		
+
     <?php
         //Grab all options
         $options = json_decode(get_option($this->plugin_name), true);
 
-        // 
+        //
         $enabled 		= $options['plugin']['enabled'];
 		//
         $client_id 		= $options['client']['id'];
@@ -46,7 +45,7 @@
         $ep_userinfo 	= $options['endpoints']['userinfo'];
 		//
 		$ep_groups 		= $options['endpoints']['groups'];
-    	// 
+    	//
         settings_fields($this->plugin_name);
         //do_settings_sections($this->plugin_name);
     ?>
@@ -61,45 +60,45 @@
 				</tr>
 			</tbody>
 		</table> <!-- .form-table -->
-		
+
 		<hr/>
-		
+
 		<h3>Client Settings:</h3>
-		
+
 		<p>You must fill in all of these fields.</p>
-		
+
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
 					<th scope="row">Client ID:</th>
 					<td>
-						<input type="text" id="<?php echo $this->plugin_name; ?>-client_id" name="<?php echo $this->plugin_name; ?>[client_id]"  value="<?php if(!empty($client_id)) echo $client_id; ?>"/> 
+						<input type="text" id="<?php echo $this->plugin_name; ?>-client_id" name="<?php echo $this->plugin_name; ?>[client_id]"  value="<?php if(!empty($client_id)) echo $client_id; ?>"/>
 					</td>
 				</tr>
-			
+
 			<tr valign="top">
 				<th scope="row">Client Secret:</th>
 				<td>
 					<input type="text" id="<?php echo $this->plugin_name; ?>-client_secret" name="<?php echo $this->plugin_name; ?>[client_secret]" value="<?php if(!empty($client_secret)) echo $client_secret; ?>"/>
 				</td>
 			</tr>
-			
+
 			<tr valign="top">
 				<th scope="row">Redirect URL:</th>
 				<td>
 					<input type="url" id="<?php echo $this->plugin_name; ?>-redirect_url" name="<?php echo $this->plugin_name; ?>[redirect_url]" value="<?php if(!empty($redirect_url)) echo $redirect_url; ?>"/>
 				</td>
 			</tr>
-			
+
 			</tbody>
 		</table> <!-- .form-table -->
-		
+
 		<hr>
-		
+
 		<h3>OAuth Provider</h3>
-		
+
 		<p>You will most likely not need to change the default values.</p>
-		
+
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -108,29 +107,29 @@
 						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_auth" name="<?php echo $this->plugin_name; ?>[ep_auth]" value="<?php if(!empty($ep_auth)) echo $ep_auth; ?>"/>
 					</td>
 				</tr>
-				
+
 				<tr valign="top">
 					<th scope="row">Token Endpoint:</th>
 					<td>
 						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_token" name="<?php echo $this->plugin_name; ?>[ep_token]" value="<?php if(!empty($ep_token)) echo $ep_token; ?>"/>
 					</td>
 				</tr>
-				
+
 				<tr valign="top">
 					<th scope="row">Userinfo Endpoint:</th>
 					<td>
 						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_userinfo" name="<?php echo $this->plugin_name; ?>[ep_userinfo]" value="<?php if(!empty($ep_userinfo)) echo $ep_userinfo; ?>"/>
 					</td>
-				</tr>			
+				</tr>
 			</tbody>
 		</table> <!-- .form-table -->
-		
+
 		<hr>
-		
+
 		<h3>Optional Settings</h3>
-		
+
 		<p>Enable extra functionality.</p>
-		
+
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -139,17 +138,17 @@
 						<input type="checkbox" id="<?php echo $this->plugin_name; ?>-groups_enabled" name="<?php echo $this->plugin_name; ?>[groups_enabled]" value="1" <?php checked($enabled, 1); ?>/>
 					</td>
 				</tr>
-				
+
 				<tr valign="top">
 					<th scope="row">Groups API Endpoint:</th>
 					<td>
 						<input type="url" id="<?php echo $this->plugin_name; ?>-ep_groups" name="<?php echo $this->plugin_name; ?>[ep_groups]" value="<?php if(!empty($ep_groups)) echo $ep_groups; ?>"/>
 					</td>
 				</tr>
-			
+
 			</tbody>
 		</table> <!-- .form-table -->
-		
+
 		<?php submit_button('Save', 'primary','submit', TRUE); ?>
 
 	</form>

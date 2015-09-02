@@ -30,7 +30,6 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 
-
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-feide-connect-wp-auth-activator.php
